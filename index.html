@@ -22,13 +22,16 @@
         /* --- GAYA LOGO --- */
         .logo-container {
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
         }
         .logo-img {
             max-width: 150px; /* Ukuran maksimal logo */
             width: 100%;      /* Agar responsif di HP kecil */
             height: auto;
             border-radius: 8px;
+            object-fit: contain;
         }
 
         h2 { text-align: center; color: #333; margin-bottom: 5px; margin-top: 0;}
@@ -62,7 +65,7 @@
 
 <div class="container">
     <div class="logo-container">
-        <img src="https://github.com/pkbmcelahcahaya/Absensi/blob/main/logo_celahcahaya.png" alt="Logo PKBM" class="logo-img">
+        <img src="https://raw.githubusercontent.com/pkbmcelahcahaya/Absensi/main/logo_celahcahaya.png" alt="Logo PKBM" class="logo-img">
     </div>
 
     <h2>Absensi PKBM</h2>
@@ -83,10 +86,9 @@
 
 <script>
     // --- KONFIGURASI UTAMA ---
-    // Pastikan URL Script ini BENAR milik Anda
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzvrGdEi4nPpDHKVhiJEaiOcryu2jA0B39afuyOXq0nyyGFXxDTj2qsYSD4YVQB3Iy5Tw/exec'; 
     
-    // Koordinat PKBM Celah Cahaya (Yang sudah diperbarui)
+    // Koordinat PKBM Celah Cahaya (Updated)
     const PUSAT_LAT = -7.4709888;   
     const PUSAT_LONG = 107.9355414;
     
