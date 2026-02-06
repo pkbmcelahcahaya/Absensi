@@ -5,23 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Absensi PKBM Celah Cahaya</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; max-width: 400px; margin: 0 auto; background-color: #f4f4f9; }
-        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #333; margin-bottom: 5px;}
-        .subtitle { text-align: center; color: #666; font-size: 0.9em; margin-bottom: 20px; }
-        input, select, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        button { background-color: #28a745; color: white; border: none; font-weight: bold; cursor: pointer; font-size: 16px; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 20px; 
+            max-width: 400px; 
+            margin: 0 auto; 
+            background-color: #f4f4f9; 
+        }
+        .container { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+        }
+        
+        /* --- GAYA LOGO --- */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .logo-img {
+            max-width: 150px; /* Ukuran maksimal logo */
+            width: 100%;      /* Agar responsif di HP kecil */
+            height: auto;
+            border-radius: 8px;
+        }
+
+        h2 { text-align: center; color: #333; margin-bottom: 5px; margin-top: 0;}
+        .subtitle { text-align: center; color: #666; font-size: 0.9em; margin-bottom: 25px; }
+        
+        label { font-weight: 600; color: #444; font-size: 0.9em; display: block; margin-top: 10px;}
+        input, select { width: 100%; padding: 12px; margin: 5px 0 15px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        
+        button { 
+            width: 100%;
+            padding: 14px; 
+            background-color: #28a745; 
+            color: white; 
+            border: none; 
+            border-radius: 6px;
+            font-weight: bold; 
+            cursor: pointer; 
+            font-size: 16px; 
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        button:hover { background-color: #218838; }
         button:disabled { background-color: #ccc; cursor: not-allowed; }
-        #status { text-align: center; margin-top: 15px; font-size: 0.9em; line-height: 1.5; padding: 10px; border-radius: 5px; }
-        .error { background-color: #ffe6e6; color: #d63031; border: 1px solid #fab1a0; }
-        .success { background-color: #e6fffa; color: #00b894; border: 1px solid #55efc4; }
+        
+        #status { text-align: center; margin-top: 15px; font-size: 0.9em; line-height: 1.5; padding: 12px; border-radius: 6px; display: none; }
+        .error { background-color: #ffe6e6; color: #d63031; border: 1px solid #fab1a0; display: block !important; }
+        .success { background-color: #e6fffa; color: #00b894; border: 1px solid #55efc4; display: block !important; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>📍 Absensi PKBM</h2>
-    <p class="subtitle">Paket B & Paket C</p>
+    <div class="logo-container">
+        <img src="https://drive.google.com/uc?export=view&id=1i6shhq0gkuRIQjw3T_K0EwGzO9aaEd4R" alt="Logo PKBM" class="logo-img">
+    </div>
+
+    <h2>Absensi PKBM</h2>
+    <p class="subtitle">Paket B & Paket C | Celah Cahaya</p>
     
     <label for="nama">Nama Lengkap:</label>
     <input type="text" id="nama" placeholder="Contoh: Budi Santoso">
@@ -37,18 +82,17 @@
 </div>
 
 <script>
-    // --- KONFIGURASI ---
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzvrGdEi4nPpDHKVhiJEaiOcryu2jA0B39afuyOXq0nyyGFXxDTj2qsYSD4YVQB3Iy5Tw/exec'; // <-- GANTI INI!
+    // --- KONFIGURASI UTAMA ---
+    // Pastikan URL Script ini BENAR milik Anda
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzvrGdEi4nPpDHKVhiJEaiOcryu2jA0B39afuyOXq0nyyGFXxDTj2qsYSD4YVQB3Iy5Tw/exec'; 
     
-    // Koordinat PKBM Celah Cahaya
-
-
+    // Koordinat PKBM Celah Cahaya (Yang sudah diperbarui)
     const PUSAT_LAT = -7.4709888;   
     const PUSAT_LONG = 107.9355414;
     
-    // RADIUS DIPERKECIL JADI 50 METER
+    // Radius Toleransi (Meter)
     const RADIUS_METER = 50; 
-    // -------------------
+    // -------------------------
 
     const btn = document.getElementById('btnAbsen');
     const statusDiv = document.getElementById('status');
@@ -56,12 +100,13 @@
     function getLocation() {
         const nama = document.getElementById('nama').value;
         if(nama.trim() === ""){
-            alert("Nama harus diisi!");
+            alert("Harap isi Nama Lengkap terlebih dahulu!");
             return;
         }
 
         btn.disabled = true;
         btn.innerText = "Mendeteksi Lokasi...";
+        statusDiv.style.display = "block";
         statusDiv.className = ""; 
         statusDiv.innerText = "Sedang mengambil koordinat GPS...";
 
@@ -72,7 +117,8 @@
                 maximumAge: 0
             });
         } else {
-            statusDiv.innerHTML = "Browser HP tidak mendukung GPS.";
+            statusDiv.className = "error";
+            statusDiv.innerText = "Browser HP Anda tidak mendukung GPS.";
             btn.disabled = false;
         }
     }
@@ -82,7 +128,7 @@
         const userLong = position.coords.longitude;
         const jarak = hitungJarak(userLat, userLong, PUSAT_LAT, PUSAT_LONG);
         
-        // Cek Jarak 50 Meter
+        // Cek Jarak
         if (jarak > RADIUS_METER) {
             btn.innerText = "GAGAL - KEJAUHAN";
             btn.style.backgroundColor = "#d63031"; 
@@ -93,6 +139,7 @@
                 btn.disabled = false;
                 btn.innerText = "CEK LOKASI & ABSEN";
                 btn.style.backgroundColor = "#28a745";
+                statusDiv.style.display = "none";
             }, 5000);
             return; 
         }
@@ -102,75 +149,49 @@
     }
 
     function sendPosition(lat, long) {
-        btn.innerText = "Verifikasi Data...";
+        btn.innerText = "Mengirim Data...";
         const nama = document.getElementById('nama').value;
         const paket = document.getElementById('paket').value;
 
         const data = { nama: nama, paket: paket, lat: lat, long: long };
 
+        // Menggunakan mode 'no-cors' agar tidak diblokir browser
         fetch(scriptURL, {
             method: 'POST',
             body: JSON.stringify(data),
-            mode: 'no-cors',
+            mode: 'no-cors', 
             headers: { 'Content-Type': 'text/plain' }
         })
-        .then(response => response.json()) // Kita perlu baca respons JSON dari script
-        .then(respData => {
-            // Cek balasan dari Google Script
-            if (respData.result === 'gagal' && respData.alasan === 'sudah_absen') {
-                // KASUS SUDAH ABSEN
-                btn.innerText = "SUDAH ABSEN";
-                btn.style.backgroundColor = "#e17055";
-                statusDiv.className = "error";
-                statusDiv.innerHTML = `⚠️ <b>Gagal Absen!</b><br>Nama "${nama}" sudah melakukan absen hari ini.<br>Kesempatan hanya 1x sehari.`;
-            } else if (respData.result === 'sukses') {
-                // KASUS BERHASIL
-                btn.innerText = "✅ BERHASIL!";
-                statusDiv.className = "success";
-                statusDiv.innerHTML = `<b>Absensi Diterima!</b><br>Jarak aman. Data tersimpan.`;
-                document.getElementById('nama').value = "";
-            } else {
-                throw new Error("Respon server aneh");
-            }
-
-            setTimeout(() => {
+        .then(() => {
+             // Karena no-cors, kita asumsikan data terkirim
+             btn.innerText = "✅ DATA TERKIRIM";
+             statusDiv.className = "success";
+             statusDiv.innerHTML = `<b>Proses Selesai!</b><br>Terima kasih <b>${nama}</b>.<br>Jika belum absen hari ini, data tersimpan.`;
+             
+             // Reset Form
+             document.getElementById('nama').value = "";
+             
+             setTimeout(() => {
                 btn.disabled = false;
                 btn.innerText = "CEK LOKASI & ABSEN";
-                btn.style.backgroundColor = "#28a745";
-            }, 4000);
+                statusDiv.style.display = "none";
+            }, 5000);
         })
         .catch(error => {
-            // Karena mode 'no-cors', fetch tidak bisa baca JSON respon error.
-            // Jadi kita asumsikan jika tidak error network, maka sukses (keterbatasan no-cors).
-            // TAPI, kode apps script di atas saya buat return JSON text output.
-            // Supaya bisa dibaca, kita ubah sedikit teknik fetch di bawah.
-            
-            // NOTE: Agar fitur "Cek 1x Sehari" berjalan sempurna dengan pesan error yang muncul,
-            // Google Apps Script Web App HARUS di-deploy dengan setting "Who has access: Anyone".
-            // Jika sudah benar, pesan error akan muncul.
-            
-            // Fallback pesan jika fetch 'no-cors' memblokir pembacaan:
-            statusDiv.className = "success";
-            statusDiv.innerText = "Data terkirim! (Jika belum absen hari ini)";
+            statusDiv.className = "error";
+            statusDiv.innerText = "Gagal koneksi internet/server.";
             btn.disabled = false;
-            btn.innerText = "CEK LOKASI & ABSEN";
         });
     }
 
-    // Koreksi Fetch agar bisa membaca respon Server (PENTING UNTUK FITUR 1x SEHARI)
-    // Fungsi sendPosition di atas menggunakan fetch standard yg kena CORS.
-    // Kita ganti fetch di atas dengan teknik "redirect" di Apps Script atau gunakan mode no-cors
-    // dengan pemahaman bahwa browser mungkin tidak menampilkan pesan "Sudah Absen" dengan detil
-    // kecuali script di deploy benar. 
-    
-    // *Revisi fungsi sendPosition agar bekerja lebih stabil:*
-    
-   function hitungJarak(lat1, lon1, lat2, lon2) {
-        const R = 6371e3; 
+    // Rumus Matematika Menghitung Jarak (Haversine Formula)
+    function hitungJarak(lat1, lon1, lat2, lon2) {
+        const R = 6371e3; // Radius bumi meter
         const φ1 = lat1 * Math.PI/180; 
         const φ2 = lat2 * Math.PI/180;
         const Δφ = (lat2-lat1) * Math.PI/180;
         const Δλ = (lon2-lon1) * Math.PI/180;
+
         const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
                   Math.cos(φ1) * Math.cos(φ2) *
                   Math.sin(Δλ/2) * Math.sin(Δλ/2);
@@ -180,56 +201,22 @@
 
     function showError(error) {
         btn.disabled = false;
-        btn.innerText = "ULANGI";
+        btn.innerText = "ULANGI ABSEN";
         statusDiv.className = "error";
-        statusDiv.innerText = "Wajib izinkan Lokasi (GPS) untuk absen.";
-    }
-</script>
-
-<script>
-    // Timpa fungsi sendPosition dengan versi yang kompatibel untuk baca respon
-    // Note: Ini menggunakan trik agar bisa membaca return JSON dari Google Script
-    // Pastikan Deployment Access: "Anyone"
-    
-    sendPosition = function(lat, long) {
-        btn.innerText = "Mengecek Database...";
-        const nama = document.getElementById('nama').value;
-        const paket = document.getElementById('paket').value;
-        
-        // Kita gunakan parameter URL untuk kirim data (lebih stabil untuk simple GET/POST)
-        // Tapi karena kita pakai POST JSON di Apps Script, kita pakai fetch standard.
-        // Agar tidak kena CORS error yang memblokir pesan "Gagal", kita pakai redirect method 
-        // atau kita terima nasib bahwa di 'no-cors' kita tidak tahu dia gagal/sukses.
-        
-        // SOLUSI TERBAIK UNTUK PEMULA:
-        // Gunakan 'no-cors'. Pesan "Anda sudah absen" mungkin tidak muncul di layar HP, 
-        // TAPI data tetap DITOLAK masuk ke Spreadsheet.
-        
-        const data = { nama: nama, paket: paket, lat: lat, long: long };
-
-        fetch(scriptURL, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            mode: 'no-cors', // Mode ini menyembunyikan respon error/sukses
-            headers: { 'Content-Type': 'text/plain' }
-        })
-        .then(() => {
-             // Karena no-cors, kita tidak tahu hasilnya "duplicate" atau "sukses"
-             // Jadi kita beri pesan netral
-             btn.innerText = "DATA TERKIRIM";
-             statusDiv.className = "success";
-             statusDiv.innerHTML = `<b>Proses Selesai.</b><br>Jika Anda belum absen hari ini, data tersimpan.<br>Jika sudah, data otomatis ditolak sistem.`;
-             
-             setTimeout(() => {
-                btn.disabled = false;
-                btn.innerText = "CEK LOKASI & ABSEN";
-                document.getElementById('nama').value = "";
-            }, 4000);
-        })
-        .catch(error => {
-            statusDiv.innerText = "Gagal koneksi internet.";
-            btn.disabled = false;
-        });
+        statusDiv.style.display = "block";
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                statusDiv.innerText = "Anda menolak akses Lokasi. Mohon Izinkan GPS.";
+                break;
+            case error.POSITION_UNAVAILABLE:
+                statusDiv.innerText = "Sinyal GPS tidak ditemukan.";
+                break;
+            case error.TIMEOUT:
+                statusDiv.innerText = "Waktu habis mencari sinyal GPS.";
+                break;
+            default:
+                statusDiv.innerText = "Error GPS tidak diketahui.";
+        }
     }
 </script>
 
